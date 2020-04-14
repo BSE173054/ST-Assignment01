@@ -5,34 +5,80 @@
  */
 package nextday;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import static nextday.NextDay.addOneDayCalendar;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * 
+ * @author Ahsan Jamshaid
+ * 		   Usama Yasin
+ * 		   Jerrold Sigamony
  */
-public class NextDay {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws ParseException {
-        // TODO code application logic here
-        String date;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter Date in \" yyyy-mm-dd \" format : ");
-        date = sc.next();
-     System.out.println("Incremented Date : "+addOneDayCalendar(date));
+public class NextDayIT {
+    
+    public NextDayIT() {
     }
-    public static String addOneDayCalendar(String date) throws ParseException
-  {
-  
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    Calendar c = Calendar.getInstance();
-    c.setTime(sdf.parse(date));
-    c.add(Calendar.DATE, 1);
-    return sdf.format(c.getTime());
-}
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
+    }
+    /**
+     * Test of addOneDayCalendar method, of class NextDay.
+     */
+    @Test
+    public void testAddOneDayCalendar() throws Exception {
+        /*--------------------Input from file--------------------*/
+        File file = new File("expected.txt");
+       FileInputStream fis = new FileInputStream(file);
+        byte[] buffer = new byte[10];
+        StringBuilder sb = new StringBuilder();
+        while (fis.read(buffer) != -1) {
+                sb.append(new String(buffer));
+                buffer = new byte[10];
+        }
+        fis.close();
+        String content = sb.toString();
+        /*--------------------Input from file--------------------*/
+        String []year = {"1999", "2000","2001","2010","2019","2020","2021"};
+        String []month = {"00","01","02","06","11","12","13"};
+        String []day = {"00","01","02","16","30","31","32"};
+        String []actual = new String[344];
+        int count=0;
+        String []expected = content.split(" ");
+        String date=new String();
+        //input into the function
+         for(int i=0;i<year.length;i++)
+        {
+            for(int j=0;j<month.length;j++)
+            {
+                for(int k=0;k<day.length;k++)
+                {
+                    date = year[i]+"-"+month[j]+"-"+day[k]; 
+                    actual[count++] = addOneDayCalendar(date);
+                }
+            }
+        }
+         Assert.assertArrayEquals(expected, actual);
+    }
+    
 }
