@@ -4,46 +4,79 @@
  * and open the template in the editor.
  */
 package triangletype;
-import java.util.Scanner;
+
+import junit.framework.Assert;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import java.io.*;
+
 /**
  *
- * 
+ * @author Ahsan Jamshaid
+			Usama Yasin
+			Jerrold Sigamony
  */
-public class TriangleType {
+public class TriangleTypeIT {
+    
+    public TriangleTypeIT() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
+    }
 
+   
     /**
-     * @param args the command line arguments
+     * Test of Detect method, of class TriangleType.
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        int a,b,c;
-        
-        TriangleType t = new TriangleType();
-        Scanner sc = new Scanner(System.in);
-        System.out.println("please Enter length of first side : ");
-        a = sc.nextInt();
-        System.out.println("please Enter length of second side : ");
-        b = sc.nextInt();
-        System.out.println("please Enter length of third side : ");
-        c = sc.nextInt();
-        String result = t.Detect(a, b, c);
-        System.out.println("result : "+result);
-         
+    @Test
+    public void testDetect() throws FileNotFoundException,IOException{
+      /*--------------------Input from file--------------------*/
+       File file = new File("result.txt");
+       FileInputStream fis = new FileInputStream(file);
+        byte[] buffer = new byte[10];
+        StringBuilder sb = new StringBuilder();
+        while (fis.read(buffer) != -1) {
+                sb.append(new String(buffer));
+                buffer = new byte[10];
+        }
+        fis.close();
+        String content = sb.toString();
+        /*--------------------Input from file--------------------*/
+        int []arr1={0,1,2,50,99,100,101};
+        int []arr2={0,1,2,50,99,100,101};
+        int []arr3={0,1,2,50,99,100,101};
+        int count = 0;
+        String []actual = new String[344];
+        String []expected =  content.split(" ");//expected result
+        expected[343] = null;
+        TriangleType tt = new TriangleType();
+        /**Loops iterating sides**/
+        for (int i=0;i<arr1.length;i++){
+            for(int j=0;j<arr2.length;j++){
+                for (int k=0;k<arr3.length;k++){
+                    int a = arr1[i], b = arr2[j], c = arr3[k];
+                    actual[count++] = tt.Detect(a, b, c);
+                }
+            }
+        }
+        assertArrayEquals(expected,actual);//checking array
     }
-    String Detect(int a, int b, int c)
-    {
-        int sideA = a;
-        int sideB = b;
-        int sideC = c;
-        if (a <= 0 || b <= 0 || c <= 0) 
-            return "INVALID"; // added test
-        if (a == b && b == c) 
-            return "EQUILATERAL";
-        if (a >= b+c || c >= b+a || b >= a+c) 
-            return "INVALID";
-        if (b==c || a==b || c==a) 
-        return "ISOSCELES";
-    return "SCALENE";
-    }
+    
 }
